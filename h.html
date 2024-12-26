@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kali Linuxn</title>
+    <style>
+        body {
+            background-color: #000;
+            color: #FFFFFF;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 16px;
+            padding: 20px;
+            overflow: hidden;
+        }
+        #terminal {
+            border: 2px solid #FF0000;
+            padding: 20px;
+            width: 90%;
+            max-width: 900px;
+            height: 500px;
+            overflow-y: auto;
+            margin: 0 auto;
+            box-shadow: 0px 0px 20px #FF0000;
+        }
+        .prompt {
+            color: #FF0000;
+        }
+        .output {
+            color: #FFFFFF;
+        }
+    </style>
+</head>
+<body>
+    <div id="terminal">
+        <pre>
+<span class="prompt">root@kali:~#</span> ls
+Desktop  Documents  Downloads  happyday.exe  scripts
+
+<span class="prompt">root@kali:~#</span> file happyday.exe
+happyday.exe: PE32 executable (GUI) Intel 80386, for MS Windows
+
+<span class="prompt">root@kali:~#</span> md5sum happyday.exe
+a7b3e5d9c471b2b0854f4e1e8f0e5c63  happyday.exe
+
+<span class="prompt">root@kali:~#</span> sha256sum happyday.exe
+d98f37e9cb45b9a1e7f8e63b5c3f897a9df217d5a6b7e8f2b36b2c97af4d3e76 happyday.exe
+
+<span class="prompt">root@kali:~#</span> ./analyze --file happyday.exe
+[+] Starting static analysis...
+[+] Detected obfuscation: Custom XOR encryption
+[+] Extracting embedded payload...
+[!] Embedded payload detected: encryptor.dll
+
+[+] Running dynamic analysis in sandbox...
+[+] Observed Behavior:
+    - Encrypts files in C:\Users\User\Documents
+    - Encrypts files in C:\Users\User\Pictures
+    - Encrypts files in C:\Users\User\Desktop
+    - Drops ransom note: C:\Users\User\Desktop\README_DECRYPT.txt
+    - Creates persistence via registry key: HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run\RansomwareLoader
+    - Establishes connection to Command & Control (C2) server at 192.168.1.100
+
+[+] Indicators of Compromise (IOCs):
+    - File Hash: d98f37e9cb45b9a1e7f8e63b5c3f897a9df217d5a6b7e8f2b36b2c97af4d3e76
+    - C2 Server: 192.168.1.100
+    - Dropped File: C:\Users\User\Desktop\README_DECRYPT.txt
+    - Registry Key: HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run\RansomwareLoader
+
+[+] Analysis complete. Classification: High-Risk Ransomware.
+
+<span class="prompt">root@kali:~#</span> cat "C:\Users\User\Desktop\README_DECRYPT.txt"
+******************************************************
+ALL YOUR FILES HAVE BEEN ENCRYPTED!
+
+To decrypt your files, send 1 Bitcoin to the following address:
+1A2b3C4d5E6f7G8H9I10JkLmnopQrStUvW
+
+Once payment is confirmed, send an email with your transaction ID to:
+decrypt_support@maliciousmail.com
+
+DO NOT ATTEMPT TO RECOVER YOUR FILES WITHOUT PAYING!
+Any modification to your files will result in permanent loss.
+******************************************************
+        </pre>
+    </div>
+</body>
+</html>
+
